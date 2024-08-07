@@ -1,0 +1,10 @@
+{
+  "name": "my-event-calendar",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "python build.py"
+  },
+  "dependencies": {
+    "netlify-lambda": "^2.0.0"
+  }
+}

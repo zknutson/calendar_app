@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <script>
+        async function addEvent() {
+            const eventName = document.getElementById('event-name').value;
+            const eventDate = document.getElementById('event-date').value;
+            const eventTime = document.getElementById('event-time').value;
+            const eventIdea = document.getElementById('event-idea').checked;
+            const event = {
+                name: eventName,
+                date: eventDate,
+                time: eventTime,
+                idea: eventIdea
+            };
+            const response = await fetch('/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(event)
+            });
+            const result = await response.json();
+            console.log(result);
+            fetchEvents();
+        }
+
+        async function fetchEvents() {
+            const response = await fetch('/events');
+            const events = await response.json();
+            const eventList = document.getElementById('event-list');
+            eventList.innerHTML = '';
+            events.forEach(event => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${event.name} - ${event.date} ${event.time} ${event.idea ? '(Idea)' : ''}`;
+                eventList.appendChild(listItem);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchEvents);
+    </script>
+</head>
+<body>
+    <h1>Event Calendar</h1>
+    <form onsubmit="event.preventDefault(); addEvent();">
+        <label for="event-name">Event Name:</label>
+        <input type="text" id="event-name" required>
+        <label for="event-date">Event Date:</label>
+        <input type="date" id="event-date">
+        <label for="event-time">Event Time:</label>
+        <input type="time" id="event-time">
+        <label for="event-idea">Idea:</label>
+        <input type="checkbox" id="event-idea">
+        <button type="submit">Add Event</button>
+    </form>
+    <ul id="event-list"></ul>
+</body>
+</html>
