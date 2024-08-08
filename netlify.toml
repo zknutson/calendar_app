@@ -1,9 +1,6 @@
 [build]
   functions = "functions"
-  command = "npm run build"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
+[functions]
+  # Ensure that dependencies are installed
+  node_bundler = "esbuild"

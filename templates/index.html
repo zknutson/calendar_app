@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar</title>
     <script>
+        const NETLIFY_FUNC_BASE_URL = 'https://roombas.ekcal.com/.netlify/functions';
         async function addEvent() {
             const eventName = document.getElementById('event-name').value;
             const eventDate = document.getElementById('event-date').value;
@@ -16,7 +17,7 @@
                 time: eventTime,
                 idea: eventIdea
             };
-            const response = await fetch('/events', {
+            const response = await fetch(`${NETLIFY_FUNC_BASE_URL}/addEvent`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,7 +30,7 @@
         }
 
         async function fetchEvents() {
-            const response = await fetch('/events');
+            const response = await fetch(`${NETLIFY_FUNC_BASE_URL}/getEvents`);
             const events = await response.json();
             const eventList = document.getElementById('event-list');
             eventList.innerHTML = '';
