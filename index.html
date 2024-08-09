@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar</title>
     <script>
-        const NETLIFY_FUNC_BASE_URL = '/.netlify/functions';
+        const FUNCTION_DIR = '/.netlify/functions';
         async function addEvent() {
             const eventName = document.getElementById('event-name').value;
             const eventDate = document.getElementById('event-date').value;
@@ -17,7 +17,7 @@
                 time: eventTime,
                 idea: eventIdea
             };
-            const response = await fetch(`${NETLIFY_FUNC_BASE_URL}/addEvent`, {
+            const response = await fetch(`${FUNCTION_DIR}/addEvent`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,7 +30,7 @@
         }
 
         async function fetchEvents() {
-            const response = await fetch(`${NETLIFY_FUNC_BASE_URL}/getEvents`);
+            const response = await fetch(`${FUNCTION_DIR}/getEvents`);
             // log the raw response
             console.log('Response:', response);
             const events = await response.json();
