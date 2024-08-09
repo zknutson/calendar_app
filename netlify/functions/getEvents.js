@@ -1,10 +1,11 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import sqlite3 from 'sqlite3';
+import * as path from "node:path";
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     dialectModule: sqlite3,
-    storage: './data/events.db'
+    storage: path.resolve('data/events.db')
 });
 
 const Event = sequelize.define('Event', {
