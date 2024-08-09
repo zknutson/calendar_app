@@ -1,30 +1,35 @@
-import { db } from '../../firebase-config'; // Adjust the path as necessary
+// addEvent.js
+import { db } from '../firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 
-export const handler = async (event, context) => {
-    const body = JSON.parse(event.body);
-
+export const addEvent = async (eventDetails) => {
     try {
         const docRef = await addDoc(collection(db, 'events'), {
-            name: body.name,
-            date: body.date,
-            time: body.time,
-            idea: body.idea
+            name: eventDetails.name,
+            date: eventDetails.date,
+            time: eventDetails.time,
+            idea: eventDetails.idea
         });
         return {
-            statusCode: 201,
-            body: JSON.stringify({
-                status: 'Event added',
-                event: { id: docRef.id, ...body }
-            })
+            status: 'Event added',
+            event: { id: docRef.id, ...eventDetails }
         };
-      } catch (error) {
+    } catch (error) {
         return {
-            statusCode: 400,
-            body: JSON.stringify({
-                status: 'Error',
-                message: error.message
-            })
+            status: 'Error',
+            message: error.message
         };
     }
 };
+
+// Usage example in your client-side application
+const newEvent = {
+    name: "Event Name",
+    date: "2023-11-18",
+    time: "15:00",
+    idea: "Event Idea"
+};
+
+addEvent(newEvent)
+    .then(result => console.log(result))
+    .catch(error => console.error("Error adding event:", error));
