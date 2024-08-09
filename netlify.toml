@@ -1,6 +1,2 @@
-[build]
-  functions = "functions"
-
 [functions]
-  # Ensure that dependencies are installed
-  node_bundler = "esbuild"
+    directory = "netlify/functions-build"

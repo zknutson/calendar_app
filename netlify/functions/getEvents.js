@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+import { Sequelize, DataTypes } from 'sequelize';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -27,7 +27,7 @@ const Event = sequelize.define('Event', {
     timestamps: false
 });
 
-module.exports.handler = async () => {
+export const handler = async () => {
     await sequelize.sync();
     const events = await Event.findAll();
     return {

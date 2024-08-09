@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar</title>
     <script>
-        const NETLIFY_FUNC_BASE_URL = 'https://roombas.ekcal.com/.netlify/functions';
+        const NETLIFY_FUNC_BASE_URL = '/.netlify/functions';
         async function addEvent() {
             const eventName = document.getElementById('event-name').value;
             const eventDate = document.getElementById('event-date').value;
@@ -31,14 +31,22 @@
 
         async function fetchEvents() {
             const response = await fetch(`${NETLIFY_FUNC_BASE_URL}/getEvents`);
+            // log the raw response
+            console.log('Response:', response);
             const events = await response.json();
+            console.log('Fetched events:', events); // Debug log
             const eventList = document.getElementById('event-list');
             eventList.innerHTML = '';
-            events.forEach(event => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${event.name} - ${event.date} ${event.time} ${event.idea ? '(Idea)' : ''}`;
-                eventList.appendChild(listItem);
-            });
+
+            if (Array.isArray(events)) {
+                events.forEach(event => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${event.name} - ${event.date} ${event.time} ${event.idea ? '(Idea)' : ''}`;
+                    eventList.appendChild(listItem);
+                });
+            } else {
+                console.error('Fetched events is not an array:', events);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', fetchEvents);
