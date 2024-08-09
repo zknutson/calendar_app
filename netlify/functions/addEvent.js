@@ -1,41 +1,11 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import sqlite3 from 'sqlite3';
-import * as path from "node:path";
-
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    dialectModule: sqlite3,
-    storage: path.resolve('data/events.db')
-});
-
-const Event = sequelize.define('Event', {
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    date: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    time: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    idea: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    }
-}, {
-    tableName: 'events',
-    timestamps: false
-});
+import { db } from '../../firebase-config'; // Adjust the path as necessary
+import { collection, addDoc } from 'firebase/firestore';
 
 export const handler = async (event, context) => {
-    await sequelize.sync();
     const body = JSON.parse(event.body);
 
     try {
-        const newEvent = await Event.create({
+        const docRef = await addDoc(collection(db, 'events'), {
             name: body.name,
             date: body.date,
             time: body.time,
@@ -45,10 +15,10 @@ export const handler = async (event, context) => {
             statusCode: 201,
             body: JSON.stringify({
                 status: 'Event added',
-                event: newEvent
+                event: { id: docRef.id, ...body }
             })
         };
-    } catch (error) {
+      } catch (error) {
         return {
             statusCode: 400,
             body: JSON.stringify({
