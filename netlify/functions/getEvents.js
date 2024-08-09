@@ -1,7 +1,9 @@
 import { Sequelize, DataTypes } from 'sequelize';
+import sqlite3 from 'sqlite3';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
+    dialectModule: sqlite3,
     storage: './data/events.db'
 });
 
