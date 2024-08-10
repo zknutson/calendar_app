@@ -4,53 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar</title>
-    <script>
-        const FUNCTION_DIR = '/functions';
-        async function addEvent() {
-            const eventName = document.getElementById('event-name').value;
-            const eventDate = document.getElementById('event-date').value;
-            const eventTime = document.getElementById('event-time').value;
-            const eventIdea = document.getElementById('event-idea').checked;
-            const event = {
-                name: eventName,
-                date: eventDate,
-                time: eventTime,
-                idea: eventIdea
-            };
-            const response = await fetch(`${FUNCTION_DIR}/addEvent`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(event)
-            });
-            const result = await response.json();
-            console.log(result);
-            fetchEvents();
-        }
-
-        async function fetchEvents() {
-            const response = await fetch(`${FUNCTION_DIR}/getEvents`);
-            // log the raw response
-            console.log('Response:', response);
-            const events = await response.json();
-            console.log('Fetched events:', events); // Debug log
-            const eventList = document.getElementById('event-list');
-            eventList.innerHTML = '';
-
-            if (Array.isArray(events)) {
-                events.forEach(event => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${event.name} - ${event.date} ${event.time} ${event.idea ? '(Idea)' : ''}`;
-                    eventList.appendChild(listItem);
-                });
-            } else {
-                console.error('Fetched events is not an array:', events);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchEvents);
-    </script>
+    <script src="/index.js"></script>
 </head>
 <body>
     <h1>Event Calendar</h1>
